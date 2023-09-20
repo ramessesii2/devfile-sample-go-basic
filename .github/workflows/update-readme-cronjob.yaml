@@ -1,0 +1,28 @@
+name: Update README
+
+on:
+  schedule:
+    # Runs every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add new line to README
+        run: |
+          echo "New line with a new number: ${{ github.run_number }}" >> README.md
+
+      - name: Commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add README.md
+          git commit -m "Update README"
+          git push
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     GIT_AUTH: "https://${GH_TOKEN}@github.com"
